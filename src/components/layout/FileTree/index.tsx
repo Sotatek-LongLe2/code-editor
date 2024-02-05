@@ -1,9 +1,13 @@
 import { useState, useEffect, Fragment, useRef } from 'react';
-
 import { StyledFolderSource, StyledFileSource, StyledText } from './styles';
 import { onCheckFileType } from 'utils';
 import Image from 'components/common/Image';
 import { FileTreeDisplayProps, IFileTree } from 'libs/zip/types';
+
+import FolderIcon from 'assets/icons/folder-icon.svg';
+import ArrowIcon from 'assets/icons/arrow-icon.svg';
+import FileCodeIcon from 'assets/icons/file-code-icon.svg';
+import ImageIcon from 'assets/icons/image-icon.svg';
 
 const FileTree: React.FC<FileTreeDisplayProps> = ({
   fileTree,
@@ -214,7 +218,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
                   paddingLeft: `${depth * 10}px`,
                 }}
               >
-                <Image src='/icons/folder-icon.svg' height={24} width={24} />
+                <Image src={FolderIcon} height={24} width={24} />
                 <StyledText data-testid='text-test'>{key}</StyledText>
               </div>
               <div
@@ -222,7 +226,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
                   transform: hiddenItems[currentPath] ? '' : 'rotate(3.142rad)',
                 }}
               >
-                <Image src='/icons/arrow-icon.svg' height={24} width={24} />
+                <Image src={ArrowIcon} height={24} width={24} />
               </div>
             </StyledFolderSource>
             {!hiddenItems[currentPath] && renderTree(item as IFileTree, currentPath, depth + 1)}
@@ -230,11 +234,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
             {createNewType && selectedFolder && selectedFolder === currentPath && (
               <StyledFileSource>
                 <div style={childStyle}>
-                  <Image
-                    src={createNewType === 'folder' ? '/icons/folder-icon.svg' : '/icons/file-code-icon.svg'}
-                    height={24}
-                    width={24}
-                  />
+                  <Image src={createNewType === 'folder' ? FolderIcon : FileCodeIcon} height={24} width={24} />
                 </div>
                 {isEditing ? (
                   <input
@@ -257,11 +257,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
             {createNewType && !selectedTab && !selectedFolder && firstFileInTree && firstFileInTree === currentPath && (
               <StyledFileSource>
                 <div style={style}>
-                  <Image
-                    src={createNewType === 'folder' ? '/icons/folder-icon.svg' : '/icons/file-code-icon.svg'}
-                    height={24}
-                    width={24}
-                  />
+                  <Image src={createNewType === 'folder' ? FolderIcon : FileCodeIcon} height={24} width={24} />
                 </div>
                 <input
                   ref={inputRef}
@@ -274,11 +270,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
             {createNewType && selectedTab && selectedTab === currentPath && (
               <StyledFileSource>
                 <div style={style}>
-                  <Image
-                    src={createNewType === 'folder' ? '/icons/folder-icon.svg' : '/icons/file-code-icon.svg'}
-                    height={24}
-                    width={24}
-                  />
+                  <Image src={createNewType === 'folder' ? FolderIcon : FileCodeIcon} height={24} width={24} />
                 </div>
                 <input
                   ref={inputRef}
@@ -297,11 +289,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
             >
               <div style={style}>
                 <Image
-                  src={
-                    onCheckFileType(currentPath.split('/').pop() || '')
-                      ? '/icons/image-icon.svg'
-                      : '/icons/file-code-icon.svg'
-                  }
+                  src={onCheckFileType(currentPath.split('/').pop() || '') ? ImageIcon : FileCodeIcon}
                   height={24}
                   width={24}
                 />

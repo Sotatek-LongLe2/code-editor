@@ -21,6 +21,14 @@ import { IFileTree } from 'libs/zip/types';
 import { ZipReader, ZipWriter } from 'libs';
 import FileTree from '../FileTree';
 
+import AddIcon from 'assets/icons/add-icon.svg';
+import FileIcon from 'assets/icons/file-icon.svg';
+import UploadIcon from 'assets/icons/upload-icon.svg';
+import DownloadIcon from 'assets/icons/download-icon.svg';
+import FileWrapIcon from 'assets/icons/file-wrap-icon.svg';
+import ReloadIcon from 'assets/icons/reload-icon.svg';
+import MenuIcon from 'assets/icons/menu-icon.svg';
+
 interface IProps {}
 
 const MonacoEditor: React.FC<IProps> = () => {
@@ -221,20 +229,20 @@ const MonacoEditor: React.FC<IProps> = () => {
         <StyledWrapIconFeature>
           <StyledLabel htmlFor='create-file'>
             <button onClick={() => setCreatNewType('file')} disabled={!Object.keys(files).length}>
-              <Image src='/icons/add-icon.svg' width={20} height={20} disabled={!Object.keys(files).length} />
+              <Image src={AddIcon} width={20} height={20} disabled={!Object.keys(files).length} />
             </button>
             <StyledTooltip>Add new file</StyledTooltip>
           </StyledLabel>
           <StyledLabel htmlFor='create-folder'>
             <button onClick={() => setCreatNewType('folder')} disabled={!Object.keys(files).length}>
-              <Image src='/icons/file-icon.svg' width={20} height={20} disabled={!Object.keys(files).length} />
+              <Image src={FileIcon} width={20} height={20} disabled={!Object.keys(files).length} />
             </button>
             <StyledTooltip>Add new folder</StyledTooltip>
           </StyledLabel>
 
           <StyledLabel htmlFor='file-upload'>
             <div onClick={onUploadZip}>
-              <Image src='/icons/upload-icon.svg' width={20} height={20} />
+              <Image src={UploadIcon} width={20} height={20} />
             </div>
             <input
               type='file'
@@ -250,11 +258,10 @@ const MonacoEditor: React.FC<IProps> = () => {
             <button
               disabled={!Object.keys(files).length}
               onClick={() =>
-                Object.keys(files).length &&
-                onDownloadZip(editorInstance.current?.getValue() as string, selectedTab)
+                Object.keys(files).length && onDownloadZip(editorInstance.current?.getValue() as string, selectedTab)
               }
             >
-              <Image src='/icons/download-icon.svg' width={20} height={20} disabled={!Object.keys(files).length} />
+              <Image src={DownloadIcon} width={20} height={20} disabled={!Object.keys(files).length} />
             </button>
             <StyledTooltip>Download zip file</StyledTooltip>
           </StyledLabel>
@@ -290,7 +297,7 @@ const MonacoEditor: React.FC<IProps> = () => {
           >
             <div>
               <StyledIconFile>
-                <Image src='/icons/file-wrap-icon.svg' width={24} height={24} />
+                <Image src={FileWrapIcon} width={24} height={24} />
               </StyledIconFile>
             </div>
             <div style={{ overflowY: 'auto', display: 'flex', width: 'calc(100vw - 450px)' }}>
@@ -331,13 +338,13 @@ const MonacoEditor: React.FC<IProps> = () => {
             </div>
           </div>
           <div style={{ display: 'flex' }}>
-            <Image src='/icons/reload-icon.svg' width={16} height={16} />
+            <Image src={ReloadIcon} width={16} height={16} />
             <div
               style={{
                 margin: '0 16px',
               }}
             >
-              <Image src='/icons/menu-icon.svg' width={16} height={16} />
+              <Image src={MenuIcon} width={16} height={16} />
             </div>
           </div>
         </StyledWrapTabContent>
