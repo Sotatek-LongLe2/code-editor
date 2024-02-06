@@ -1,18 +1,16 @@
 import { useState, Fragment, useRef } from 'react';
-import { StyledFolderSource, StyledFileSource, StyledText } from './styles';
 import { onCheckFileType } from 'utils';
-import Image from 'components/common/Image';
 import { FileTreeDisplayProps, TFileTree } from 'libs/zip/types';
 
-import FolderIcon from 'assets/icons/folder-icon.svg';
-import ArrowIcon from 'assets/icons/arrow-icon.svg';
-import FileCodeIcon from 'assets/icons/file-code-icon.svg';
-import ImageIcon from 'assets/icons/image-icon.svg';
 import useUpdateHiddenItems from 'hooks/useSetHiddenTree';
 import useCreateNewTypeEffect from 'hooks/useCreateNewFileOrFolder';
 import useOnClickOutside from 'hooks/useOnClickOutside';
 
 import { StyledWrapTreeFile } from '../MonacoEditor/styles';
+
+import TreeFolder from 'components/common/TreeFolder';
+import CreateNew from 'components/common/CreateNew';
+import TreeFile from 'components/common/TreeFile';
 
 const FileTree: React.FC<FileTreeDisplayProps> = ({
   fileTree,
@@ -29,7 +27,6 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
   onEditFileTree,
 }) => {
   const [hiddenItems, setHiddenItems] = useState<{ [key: string]: boolean }>({});
-  const [isEditing, setIsEditing] = useState<boolean>(true);
   const [inputValue, setInputValue] = useState<string>('');
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +39,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
 
   useUpdateHiddenItems(selectedTab, setHiddenItems);
 
-  useCreateNewTypeEffect(createNewType, selectedTab, setIsEditing, setHiddenItems, inputRef);
+  useCreateNewTypeEffect(createNewType, selectedTab, setHiddenItems, inputRef);
 
   useOnClickOutside(inputRef, setCreateNewType);
 
@@ -76,7 +73,6 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
   // HANDLE CREATE NEW FILE OR FOLDER AFTER PRESSING ENTER
   const onEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, type: 'folder' | 'file', path: string) => {
     if (e.key === 'Enter') {
-      setIsEditing(false);
       setFilesTree(type, path, inputValue);
       setCreateNewType('');
       onEditFileTree();
@@ -143,55 +139,33 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
       const style = { marginLeft: `${depth * 10}px` };
       const childStyle = { marginLeft: `${(depth + 1) * 10}px` };
 
+      console.log('key: ', key);
+
       // GENERATE FOLDER
       if (typeof item === 'object' && item !== null && !isFile) {
         return (
           <Fragment key={currentPath}>
-            <StyledFolderSource
-              onClick={() => {
-                onToggleVisibility(currentPath);
-                setSelectedFolder(currentPath);
-                setSelectedTab('');
-              }}
-              style={{
-                backgroundColor: selectedFolder === currentPath ? '#464659' : '',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '16px',
-                  paddingLeft: `${depth * 10}px`,
-                }}
-              >
-                <Image src={FolderIcon} height={24} width={24} />
-                <StyledText data-testid='text-test'>{key}</StyledText>
-              </div>
-              <div
-                style={{
-                  transform: hiddenItems[currentPath] ? '' : 'rotate(3.142rad)',
-                }}
-              >
-                <Image src={ArrowIcon} height={24} width={24} />
-              </div>
-            </StyledFolderSource>
+            <TreeFolder
+              onToggleVisibility={onToggleVisibility}
+              setSelectedFolder={setSelectedFolder}
+              setSelectedTab={setSelectedTab}
+              currentPath={currentPath}
+              selectedFolder={selectedFolder}
+              depth={depth}
+              hiddenItems={hiddenItems}
+              name={key}
+            />
             {!hiddenItems[currentPath] && renderTree(item as TFileTree, currentPath, depth + 1)}
             {/* DETERMINE NEW FILE TYPE */}
             {createNewType && selectedFolder && selectedFolder === currentPath && (
-              <StyledFileSource>
-                <div style={childStyle}>
-                  <Image src={createNewType === 'folder' ? FolderIcon : FileCodeIcon} height={24} width={24} />
-                </div>
-                {isEditing ? (
-                  <input
-                    ref={inputRef}
-                    onChange={onInputChange}
-                    onKeyDown={(e) => onEnterKeyDown(e, createNewType, currentPath)}
-                  />
-                ) : (
-                  <StyledText>{inputValue}</StyledText>
-                )}
-              </StyledFileSource>
+              <CreateNew
+                style={childStyle}
+                createNewType={createNewType}
+                inputRef={inputRef}
+                onInputChange={onInputChange}
+                onEnterKeyDown={onEnterKeyDown}
+                currentPath={currentPath}
+              />
             )}
           </Fragment>
         );
@@ -201,47 +175,36 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
           <Fragment key={currentPath}>
             {/* IN CASE FILE IS NOT SELECTED */}
             {createNewType && !selectedTab && !selectedFolder && firstFileInTree && firstFileInTree === currentPath && (
-              <StyledFileSource>
-                <div style={style}>
-                  <Image src={createNewType === 'folder' ? FolderIcon : FileCodeIcon} height={24} width={24} />
-                </div>
-                <input
-                  ref={inputRef}
-                  onChange={onInputChange}
-                  onKeyDown={(e) => onEnterKeyDown(e, createNewType, currentPath)}
-                />
-              </StyledFileSource>
+              <CreateNew
+                style={style}
+                createNewType={createNewType}
+                inputRef={inputRef}
+                onInputChange={onInputChange}
+                onEnterKeyDown={onEnterKeyDown}
+                currentPath={currentPath}
+              />
             )}
             {/* IF FILE IS SELECTED */}
             {createNewType && selectedTab && selectedTab === currentPath && (
-              <StyledFileSource>
-                <div style={style}>
-                  <Image src={createNewType === 'folder' ? FolderIcon : FileCodeIcon} height={24} width={24} />
-                </div>
-                <input
-                  ref={inputRef}
-                  onChange={onInputChange}
-                  onKeyDown={(e) => onEnterKeyDown(e, createNewType, currentPath)}
-                />
-              </StyledFileSource>
+              <CreateNew
+                style={style}
+                createNewType={createNewType}
+                inputRef={inputRef}
+                onInputChange={onInputChange}
+                onEnterKeyDown={onEnterKeyDown}
+                currentPath={currentPath}
+              />
             )}
-            <StyledFileSource
-              onClick={() => {
-                onOpenFile(currentPath, false);
-                setSelectedFolder('');
-                onEditFileTree();
-              }}
-              style={{ backgroundColor: selectedTab === currentPath ? '#464659' : '' }}
-            >
-              <div style={style}>
-                <Image
-                  src={onCheckFileType(currentPath.split('/').pop() || '') ? ImageIcon : FileCodeIcon}
-                  height={24}
-                  width={24}
-                />
-              </div>
-              <StyledText>{key}</StyledText>
-            </StyledFileSource>
+            <TreeFile
+              onOpenFile={onOpenFile}
+              currentPath={currentPath}
+              setSelectedFolder={setSelectedFolder}
+              onEditFileTree={onEditFileTree}
+              selectedTab={selectedTab}
+              style={style}
+              onCheckFileType={onCheckFileType}
+              name={key}
+            />
           </Fragment>
         );
       }

@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 const useCreateNewTypeEffect = (
   createNewType: 'folder' | 'file' | '',
   selectedTab: string,
-  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>,
   setHiddenItems: React.Dispatch<
     React.SetStateAction<{
       [key: string]: boolean;
@@ -13,7 +12,6 @@ const useCreateNewTypeEffect = (
 ) => {
   useEffect(() => {
     if (createNewType) {
-      setIsEditing(true);
 
       if (selectedTab) {
         const parts = selectedTab.split('/');
@@ -39,7 +37,7 @@ const useCreateNewTypeEffect = (
         inputRef.current && inputRef.current.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
-  }, [createNewType, selectedTab, setIsEditing, setHiddenItems, inputRef]);
+  }, [createNewType, selectedTab, setHiddenItems, inputRef]);
 };
 
 export default useCreateNewTypeEffect;
