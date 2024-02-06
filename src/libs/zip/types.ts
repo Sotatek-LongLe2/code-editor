@@ -1,19 +1,19 @@
-export interface IFileTree {
+export type TFileTree = {
   [key: string]:
-    | IFileTree
+    | TFileTree
     | {
         content: string | Uint8Array;
         blob?: string;
       };
 }
 
-export interface ZipEntry {
+export type ZipEntry = {
   name: string;
   content: string | Uint8Array;
 }
 
-export interface FileTreeDisplayProps {
-  fileTree: IFileTree;
+export type FileTreeDisplayProps = {
+  fileTree: TFileTree;
   setFilesTree: (value: 'folder' | 'file', path: string, key: string) => void;
   setSelectedFile: (
     value: React.SetStateAction<{

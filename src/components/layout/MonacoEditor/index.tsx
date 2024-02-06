@@ -15,11 +15,13 @@ import {
   StyledWrapTreeFile,
 } from './styles';
 
-import Image from 'components/common/Image';
 import { onCheckFileType } from 'utils';
-import { IFileTree } from 'libs/zip/types';
+import { TFileTree } from 'libs/zip/types';
 import { ZipReader, ZipWriter } from 'libs';
-import FileTree from '../FileTree';
+
+import Image from 'components/common/Image';
+import ImageButton from 'components/common/ImageButton';
+import FileTree from 'components/layout/FileTree';
 
 import AddIcon from 'assets/icons/add-icon.svg';
 import FileIcon from 'assets/icons/file-icon.svg';
@@ -33,10 +35,10 @@ import useScrollToActiveTab from 'hooks/useScrollToActiveTab';
 import useInitiateEditor from 'hooks/useInitiateEditor';
 import useTabRefs from 'hooks/useTabRefs';
 
-interface IProps {}
+type TProps = {};
 
-const MonacoEditor: React.FC<IProps> = () => {
-  const [files, setFiles] = useState<IFileTree>({});
+const MonacoEditor: React.FC<TProps> = () => {
+  const [files, setFiles] = useState<TFileTree>({});
   const [tabs, setTabs] = useState<string[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<{
@@ -74,7 +76,7 @@ const MonacoEditor: React.FC<IProps> = () => {
         };
       };
 
-      setFiles((prevState: IFileTree) => ({
+      setFiles((prevState: TFileTree) => ({
         ...prevState,
         fileTree: updateObject(prevState.fileTree, 0),
       }));
@@ -101,7 +103,7 @@ const MonacoEditor: React.FC<IProps> = () => {
     if (pathParts) {
       for (const part of pathParts) {
         if (currentElement[part] && typeof currentElement[part] === 'object') {
-          currentElement = currentElement[part] as IFileTree | { content: string | Uint8Array; blob?: string };
+          currentElement = currentElement[part] as TFileTree | { content: string | Uint8Array; blob?: string };
         } else {
           currentElement = null;
           break;
@@ -126,7 +128,7 @@ const MonacoEditor: React.FC<IProps> = () => {
   };
 
   const onDownloadZip = (content: string, file: string) => {
-    setFiles((prevFileTree: IFileTree) => {
+    setFiles((prevFileTree: TFileTree) => {
       const parts = file.split('/');
       let currentLevel: any = {
         ...prevFileTree.fileTree,
@@ -142,7 +144,7 @@ const MonacoEditor: React.FC<IProps> = () => {
           currentLevel[part] = { ...currentLevel[part] };
         }
 
-        currentLevel = currentLevel[part] as IFileTree;
+        currentLevel = currentLevel[part] as TFileTree;
       }
 
       const lastPart = parts[parts.length - 1];
@@ -157,7 +159,7 @@ const MonacoEditor: React.FC<IProps> = () => {
 
       if (Object.keys({ ...prevFileTree }).length > 0) {
         const zipWriter = new ZipWriter('export.zip');
-        zipWriter.generateFromFileTree(files.fileTree as IFileTree);
+        zipWriter.generateFromFileTree(files.fileTree as TFileTree);
       }
       return { ...prevFileTree };
     });
@@ -186,7 +188,7 @@ const MonacoEditor: React.FC<IProps> = () => {
       };
     };
 
-    setFiles((prevState: IFileTree) => ({
+    setFiles((prevState: TFileTree) => ({
       ...prevState,
       fileTree: updateNestedObject(prevState.fileTree, 0),
     }));
@@ -196,19 +198,20 @@ const MonacoEditor: React.FC<IProps> = () => {
     <StyledContainer data-testid='app-main' className='monaco-editor'>
       <StyledTabFeatures>
         <StyledWrapIconFeature>
-          <StyledLabel htmlFor='create-file'>
-            <button onClick={() => setCreateNewType('file')} disabled={!Object.keys(files).length}>
-              <Image src={AddIcon} width={20} height={20} disabled={!Object.keys(files).length} />
-            </button>
-            <StyledTooltip>Add new file</StyledTooltip>
-          </StyledLabel>
-          <StyledLabel htmlFor='create-folder'>
-            <button onClick={() => setCreateNewType('folder')} disabled={!Object.keys(files).length}>
-              <Image src={FileIcon} width={20} height={20} disabled={!Object.keys(files).length} />
-            </button>
-            <StyledTooltip>Add new folder</StyledTooltip>
-          </StyledLabel>
-
+          <ImageButton
+            files={files}
+            type='file'
+            icon={AddIcon}
+            tooltip='Add new file'
+            onClick={() => setCreateNewType('file')}
+          />
+          <ImageButton
+            files={files}
+            type='folder'
+            icon={FileIcon}
+            tooltip='Add new folder'
+            onClick={() => setCreateNewType('folder')}
+          />
           <StyledLabel htmlFor='file-upload'>
             <div onClick={onUploadZip}>
               <Image src={UploadIcon} width={20} height={20} />
@@ -223,17 +226,15 @@ const MonacoEditor: React.FC<IProps> = () => {
             />
             <StyledTooltip>Upload zip file</StyledTooltip>
           </StyledLabel>
-          <StyledLabel htmlFor='file-download'>
-            <button
-              disabled={!Object.keys(files).length}
-              onClick={() =>
-                Object.keys(files).length && onDownloadZip(editorInstance.current?.getValue() as string, selectedTab)
-              }
-            >
-              <Image src={DownloadIcon} width={20} height={20} disabled={!Object.keys(files).length} />
-            </button>
-            <StyledTooltip>Download zip file</StyledTooltip>
-          </StyledLabel>
+          <ImageButton
+            files={files}
+            type='folder'
+            icon={DownloadIcon}
+            tooltip='Download zip file'
+            onClick={() =>
+              Object.keys(files).length && onDownloadZip(editorInstance.current?.getValue() as string, selectedTab)
+            }
+          />
         </StyledWrapIconFeature>
         <StyledWrapTreeFile>
           <FileTree

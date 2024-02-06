@@ -9,7 +9,7 @@ import {
   DIRECTORY_SIGNATURE,
   LOCAL_FILE_HEADER_SIGNATURE,
 } from './constants';
-import { IFileTree } from './types';
+import { TFileTree } from './types';
 import { getMimeType } from './ultils';
 
 export class ZipReader {
@@ -23,7 +23,7 @@ export class ZipReader {
    * Reads a ZIP file and returns the file tree with contents.
    *
    * @param {File} zipFile - The ZIP file to read.
-   * @returns {Promise<{ fileTree: IFileTree }>} - A promise resolving to the file tree with contents.
+   * @returns {Promise<{ fileTree: TFileTree }>} - A promise resolving to the file tree with contents.
    * @throws {Error} - Throws an error if the ZIP file is invalid.
    */
   public async readFile(zipFile: File) {
@@ -104,10 +104,10 @@ export class ZipReader {
    * Reads the contents of a ZIP file and constructs a hierarchical file tree with file contents.
    *
    * @param {Uint8Array} zipData - The Uint8Array containing the ZIP file data.
-   * @returns {IFileTree} - The hierarchical file tree with file contents.
+   * @returns {TFileTree} - The hierarchical file tree with file contents.
    */
-  public readFileTreeWithContents(zipData: Uint8Array): IFileTree {
-    const result: IFileTree = {};
+  public readFileTreeWithContents(zipData: Uint8Array): TFileTree {
+    const result: TFileTree = {};
 
     let currentOffset = 0;
     // Data descriptor signature
@@ -152,7 +152,7 @@ export class ZipReader {
                 }
               }
               if (index < parts.length - 1) {
-                current = current[part] as IFileTree;
+                current = current[part] as TFileTree;
               }
             });
           } catch (error) {

@@ -2,7 +2,7 @@ import { useState, Fragment, useRef } from 'react';
 import { StyledFolderSource, StyledFileSource, StyledText } from './styles';
 import { onCheckFileType } from 'utils';
 import Image from 'components/common/Image';
-import { FileTreeDisplayProps, IFileTree } from 'libs/zip/types';
+import { FileTreeDisplayProps, TFileTree } from 'libs/zip/types';
 
 import FolderIcon from 'assets/icons/folder-icon.svg';
 import ArrowIcon from 'assets/icons/arrow-icon.svg';
@@ -51,7 +51,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
 
     for (const part of pathParts) {
       if (currentElement[part] && typeof currentElement[part] === 'object') {
-        currentElement = currentElement[part] as IFileTree | { content: string | Uint8Array; blob?: string };
+        currentElement = currentElement[part] as TFileTree | { content: string | Uint8Array; blob?: string };
       } else {
         currentElement = null;
         break;
@@ -130,14 +130,14 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
   };
 
   const renderTree = (
-    tree: IFileTree | { content: string | Uint8Array; blob?: string },
+    tree: TFileTree | { content: string | Uint8Array; blob?: string },
     path = '',
     depth: number = 0,
   ): JSX.Element[] => {
     return Object.keys(tree).map((key) => {
       const currentPath = path ? `${path}/${key}` : key;
       const isFile = key.includes('.');
-      const item = (tree as IFileTree)[key];
+      const item = (tree as TFileTree)[key];
       const style = { marginLeft: `${depth * 10}px` };
       const childStyle = { marginLeft: `${(depth + 1) * 10}px` };
 
@@ -173,7 +173,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
                 <Image src={ArrowIcon} height={24} width={24} />
               </div>
             </StyledFolderSource>
-            {!hiddenItems[currentPath] && renderTree(item as IFileTree, currentPath, depth + 1)}
+            {!hiddenItems[currentPath] && renderTree(item as TFileTree, currentPath, depth + 1)}
             {/* DETERMINE NEW FILE TYPE */}
             {createNewType && selectedFolder && selectedFolder === currentPath && (
               <StyledFileSource>
@@ -248,7 +248,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
 
   const innerFileTree = fileTree['fileTree'] || {};
 
-  return <>{renderTree(innerFileTree)}</>;
+  return <div>{renderTree(innerFileTree)}</div>;
 };
 
 export default FileTree;

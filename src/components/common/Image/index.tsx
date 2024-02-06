@@ -2,14 +2,14 @@ import React from 'react';
 
 import { StyledImg } from './styles';
 
-interface IProps {
+type TProps = {
   src: string;
   height: number;
   width: number;
   disabled?: boolean;
 }
 
-const Image: React.FC<IProps> = ({ src, height, width, disabled }) => {
+const Image: React.FC<TProps> = ({ src, height, width, disabled }) => {
   return (
     <StyledImg src={src} alt='' height={height} width={width} style={{ cursor: disabled ? 'unset' : 'pointer' }} />
   );

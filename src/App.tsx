@@ -1,8 +1,8 @@
 import MonacoEditor from 'components/layout/MonacoEditor';
 
-interface IProps {}
+type TProps = {};
 
-const App: React.FC<IProps> = () => {
+const App: React.FC<TProps> = () => {
   return (
     <div className='App' data-testid='app-container'>
       <MonacoEditor />

@@ -13,7 +13,7 @@ import {
   LOCAL_FILE_HEADER_SIGNATURE,
   SPLIT_ZIP_FILE_SIGNATURE,
 } from './constants';
-import { IFileTree, ZipEntry } from './types';
+import { TFileTree, ZipEntry } from './types';
 import { concatUint8Arrays, createAndDownloadFile, getCurrentTimestamps, numberToBytes } from './ultils';
 
 export class ZipWriter {
@@ -97,10 +97,10 @@ export class ZipWriter {
    * The generated file will be named based on the ZipWriter instance's name property.
    * Download file zip
    *
-   * @param {IFileTree} fileTree - The file tree structure to be converted into a ZIP file.
+   * @param {TFileTree} fileTree - The file tree structure to be converted into a ZIP file.
    * @returns {Uint8Array} The generated ZIP file content as a Uint8Array.
    */
-  generateFromFileTree(fileTree: IFileTree) {
+  generateFromFileTree(fileTree: TFileTree) {
     this.entries = this.convertFileTreeToZipEntries(fileTree);
     const bytes = this.generate();
     createAndDownloadFile(this.name, bytes);
@@ -110,11 +110,11 @@ export class ZipWriter {
   /**
    * Recursively converts a file tree structure into an array of ZipEntry objects.
    *
-   * @param {IFileTree} fileTree - The file tree structure to be converted.
+   * @param {TFileTree} fileTree - The file tree structure to be converted.
    * @param {string} basePath - The base path used for constructing full file paths.
    * @returns {ZipEntry[]} An array of ZipEntry objects representing the file tree.
    */
-  private convertFileTreeToZipEntries(fileTree: IFileTree, basePath = ''): ZipEntry[] {
+  private convertFileTreeToZipEntries(fileTree: TFileTree, basePath = ''): ZipEntry[] {
     const entries: ZipEntry[] = [];
 
     for (const [key, value] of Object.entries(fileTree)) {
@@ -130,7 +130,7 @@ export class ZipWriter {
         entries.push({ name: fullPath, content: value.content });
       } else {
         // Directory node
-        entries.push(...this.convertFileTreeToZipEntries(value as IFileTree, fullPath));
+        entries.push(...this.convertFileTreeToZipEntries(value as TFileTree, fullPath));
       }
     }
 
