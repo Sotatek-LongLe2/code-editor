@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { StyledLabel, StyledTooltip } from 'components/layout/MonacoEditor/styles';
-import Image from '../Image';
 import { TFileTree } from 'libs/zip/types';
+
+import { StyledLabel, StyledTooltip } from 'components/layout/MonacoEditor/styles';
+import Image from 'components/common/Image';
 
 type TProps = {
   files: TFileTree;
@@ -10,7 +11,7 @@ type TProps = {
   icon: string;
   tooltip: string;
   onClick: () => void;
-}
+};
 
 const ImageButton: React.FC<TProps> = ({ files, type, icon, tooltip, onClick }) => {
   return (

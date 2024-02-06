@@ -22,6 +22,7 @@ import { ZipReader, ZipWriter } from 'libs';
 import Image from 'components/common/Image';
 import ImageButton from 'components/common/ImageButton';
 import FileTree from 'components/layout/FileTree';
+import ImageInput from 'components/common/ImageInput';
 
 import AddIcon from 'assets/icons/add-icon.svg';
 import FileIcon from 'assets/icons/file-icon.svg';
@@ -212,7 +213,8 @@ const MonacoEditor: React.FC<TProps> = () => {
             tooltip='Add new folder'
             onClick={() => setCreateNewType('folder')}
           />
-          <StyledLabel htmlFor='file-upload'>
+          <ImageInput icon={UploadIcon} onClick={onUploadZip} onChange={onChangeZip} fileInputRef={fileInputRef} />
+          {/* <StyledLabel htmlFor='file-upload'>
             <div onClick={onUploadZip}>
               <Image src={UploadIcon} width={20} height={20} />
             </div>
@@ -225,7 +227,7 @@ const MonacoEditor: React.FC<TProps> = () => {
               style={{ display: 'none' }}
             />
             <StyledTooltip>Upload zip file</StyledTooltip>
-          </StyledLabel>
+          </StyledLabel> */}
           <ImageButton
             files={files}
             type='folder'

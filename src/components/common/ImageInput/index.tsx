@@ -1,0 +1,32 @@
+import React from 'react';
+
+import { StyledLabel, StyledTooltip } from 'components/layout/MonacoEditor/styles';
+import Image from 'components/common/Image';
+
+type TProp = {
+  icon: string;
+  fileInputRef: React.Ref<HTMLInputElement>;
+  onClick: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+};
+
+const ImageInput: React.FC<TProp> = ({ icon, onClick, onChange, fileInputRef }) => {
+  return (
+    <StyledLabel htmlFor='file-upload'>
+      <div onClick={onClick}>
+        <Image src={icon} width={20} height={20} />
+      </div>
+      <input
+        type='file'
+        id='zipFileInput'
+        accept='.zip'
+        onChange={onChange}
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+      />
+      <StyledTooltip>Upload zip file</StyledTooltip>
+    </StyledLabel>
+  );
+};
+
+export default ImageInput;
