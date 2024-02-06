@@ -12,9 +12,9 @@ type TProps = {
   };
   createNewType: 'folder' | 'file';
   inputRef: RefObject<HTMLInputElement>;
+  currentPath: string;
   onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onEnterKeyDown: (e: KeyboardEvent<HTMLInputElement>, type: 'folder' | 'file', path: string) => void;
-  currentPath: string;
 };
 
 const CreateNew: FC<TProps> = ({ style, createNewType, inputRef, onInputChange, onEnterKeyDown, currentPath }) => {

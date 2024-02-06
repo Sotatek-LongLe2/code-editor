@@ -18,7 +18,7 @@ describe('MonacoEditor component', () => {
 
   test('changes active tab when clicked', () => {
     render(<MonacoEditor />);
-    const tabMainPy = screen.getByTestId('app-main');
+    const tabMainPy = screen.getByTestId('app-1');
     expect(tabMainPy).toHaveClass('monaco-editor');
   });
 });

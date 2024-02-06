@@ -3,7 +3,7 @@ import React from 'react';
 import { TFileTree } from 'types/types';
 
 import Image from 'components/atoms/Image';
-import { StyledLabel, StyledTooltip } from 'components/MonacoEditor/styled';
+import { StyledLabel, StyledTooltip } from 'components/modules/MonacoEditor/styled';
 
 type TProps = {
   files: TFileTree;

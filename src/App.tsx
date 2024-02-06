@@ -1,23 +1,13 @@
-import { FC } from "react";
+import { FC } from 'react';
+
+import MonacoEditor from 'components/modules/MonacoEditor';
 
 type TProps = {};
 
 const App: FC<TProps> = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App' data-test-id='app-container'>
+      <MonacoEditor />
     </div>
   );
 };

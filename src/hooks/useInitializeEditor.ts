@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import * as monaco from 'monaco-editor';
+import useUtilities from './useUtilities';
 
-import { onCheckLanguage } from 'utils';
-
-const useInitialize = (
+const useInitializeEditor = (
   editorRef: React.RefObject<HTMLDivElement>,
   editorInstance: monaco.editor.IStandaloneCodeEditor | null,
   selectedFile: {
@@ -12,6 +11,8 @@ const useInitialize = (
   },
   selectedTab: string,
 ) => {
+  const { onCheckLanguage } = useUtilities();
+
   useEffect(() => {
     if (editorRef && editorRef.current) {
       editorInstance = monaco.editor.create(editorRef.current, {
@@ -39,4 +40,4 @@ const useInitialize = (
   }, [selectedFile.content, selectedTab]);
 };
 
-export default useInitialize;
+export default useInitializeEditor;
