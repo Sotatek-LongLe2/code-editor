@@ -26,7 +26,7 @@ export interface FileTreeDisplayProps {
   setTabs: (value: React.SetStateAction<string[]>) => void;
   selectedTab: string;
   createNewType: 'folder' | 'file' | '';
-  setCreatNewType: (value: React.SetStateAction<'folder' | 'file' | ''>) => void;
+  setCreateNewType: (value: React.SetStateAction<'folder' | 'file' | ''>) => void;
   selectedFolder: string;
   setSelectedFolder: (value: React.SetStateAction<string>) => void;
   onEditFileTree: () => void;

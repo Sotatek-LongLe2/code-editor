@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef } from 'react';
 import { StyledFolderSource, StyledFileSource, StyledText } from './styles';
 import { onCheckFileType } from 'utils';
 import Image from 'components/common/Image';
@@ -8,6 +8,9 @@ import FolderIcon from 'assets/icons/folder-icon.svg';
 import ArrowIcon from 'assets/icons/arrow-icon.svg';
 import FileCodeIcon from 'assets/icons/file-code-icon.svg';
 import ImageIcon from 'assets/icons/image-icon.svg';
+import useUpdateHiddenItems from 'hooks/useSetHiddenTree';
+import useCreateNewTypeEffect from 'hooks/useCreateNewFileOrFolder';
+import useOnClickOutside from 'hooks/useOnClickOutside';
 
 const FileTree: React.FC<FileTreeDisplayProps> = ({
   fileTree,
@@ -18,7 +21,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
   setTabs,
   selectedTab,
   createNewType,
-  setCreatNewType,
+  setCreateNewType,
   selectedFolder,
   setSelectedFolder,
   onEditFileTree,
@@ -35,70 +38,11 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
 
   let clonedFileTree = JSON.parse(JSON.stringify(fileTree));
 
-  useEffect(() => {
-    if (selectedTab) {
-      const parts = selectedTab.split('/');
+  useUpdateHiddenItems(selectedTab, setHiddenItems);
 
-      let result = [];
-      let currentPath = '';
+  useCreateNewTypeEffect(createNewType, selectedTab, setIsEditing, setHiddenItems, inputRef);
 
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (i > 0) {
-          currentPath += '/';
-        }
-        currentPath += parts[i];
-        result.push(currentPath);
-      }
-
-      result.forEach((res) => {
-        setHiddenItems((prev) => ({ ...prev, [res]: false }));
-      });
-    }
-  }, [selectedTab]);
-
-  useEffect(() => {
-    if (createNewType) {
-      setIsEditing(true);
-
-      if (selectedTab) {
-        const parts = selectedTab.split('/');
-
-        let result = [];
-        let currentPath = '';
-
-        for (let i = 0; i < parts.length - 1; i++) {
-          if (i > 0) {
-            currentPath += '/';
-          }
-          currentPath += parts[i];
-          result.push(currentPath);
-        }
-
-        result.forEach((res) => {
-          setHiddenItems((prev) => ({ ...prev, [res]: false }));
-        });
-      }
-
-      setTimeout(() => {
-        inputRef.current?.focus();
-        inputRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }, [createNewType, selectedTab]);
-
-  useEffect(() => {
-    const onClickOutside = (event: MouseEvent) => {
-      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-        setCreatNewType('');
-      }
-    };
-
-    document.addEventListener('mousedown', onClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', onClickOutside);
-    };
-  }, [inputRef, setCreatNewType]);
+  useOnClickOutside(inputRef, setCreateNewType);
 
   const onOpenFile = (currentPath: string, isNew: boolean) => {
     const pathParts = currentPath.split('/');
@@ -132,7 +76,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
     if (e.key === 'Enter') {
       setIsEditing(false);
       setFilesTree(type, path, inputValue);
-      setCreatNewType('');
+      setCreateNewType('');
       onEditFileTree();
 
       const onAddFileTree = () => {

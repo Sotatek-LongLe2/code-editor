@@ -1,4 +1,4 @@
-import { createRef, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import * as monaco from 'monaco-editor';
 
@@ -16,7 +16,7 @@ import {
 } from './styles';
 
 import Image from 'components/common/Image';
-import { onCheckFileType, onCheckLanguage } from 'utils';
+import { onCheckFileType } from 'utils';
 import { IFileTree } from 'libs/zip/types';
 import { ZipReader, ZipWriter } from 'libs';
 import FileTree from '../FileTree';
@@ -29,6 +29,10 @@ import FileWrapIcon from 'assets/icons/file-wrap-icon.svg';
 import ReloadIcon from 'assets/icons/reload-icon.svg';
 import MenuIcon from 'assets/icons/menu-icon.svg';
 
+import useScrollToActiveTab from 'hooks/useScrollToActiveTab';
+import useInitiateEditor from 'hooks/useInitiateEditor';
+import useTabRefs from 'hooks/useTabRefs';
+
 interface IProps {}
 
 const MonacoEditor: React.FC<IProps> = () => {
@@ -39,53 +43,18 @@ const MonacoEditor: React.FC<IProps> = () => {
     content?: string;
     blob?: string;
   }>({});
-  const [createNewType, setCreatNewType] = useState<'folder' | 'file' | ''>('');
+  const [createNewType, setCreateNewType] = useState<'folder' | 'file' | ''>('');
   const [selectedFolder, setSelectedFolder] = useState<string>('');
-  const [tabRefs, setTabRefs] = useState<React.RefObject<HTMLDivElement>[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
-
   const editorInstance = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
-  useEffect(() => {
-    const activeTabElement = tabRefs[tabs.indexOf(selectedTab)]?.current;
+  const tabRefs = useTabRefs(tabs);
 
-    if (activeTabElement) {
-      activeTabElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
-    }
-  }, [selectedTab, tabRefs, tabs]);
+  useScrollToActiveTab(selectedTab, tabRefs, tabs);
 
-  useEffect(() => {
-    if (editorRef.current) {
-      editorInstance.current = monaco.editor.create(editorRef.current, {
-        value: selectedFile.content || '',
-        language: onCheckLanguage(selectedTab.split('/').pop() || ''),
-      });
-
-      monaco.editor.defineTheme('myCustomTheme', {
-        base: 'vs-dark',
-        inherit: true,
-        rules: [],
-        colors: {
-          'editor.background': '#292a2d',
-        },
-      });
-
-      monaco.editor.setTheme('myCustomTheme');
-    }
-
-    return () => {
-      editorInstance.current && editorInstance.current.dispose();
-    };
-  }, [selectedFile.content, selectedTab]);
-
-  useEffect(() => {
-    setTabRefs(tabs.map(() => createRef<HTMLDivElement>()));
-  }, [tabs]);
+  useInitiateEditor(editorRef, editorInstance.current, selectedFile, selectedTab);
 
   const onEditFileTree = (path: string, newValue: string) => {
     if (path && newValue) {
@@ -228,13 +197,13 @@ const MonacoEditor: React.FC<IProps> = () => {
       <StyledTabFeatures>
         <StyledWrapIconFeature>
           <StyledLabel htmlFor='create-file'>
-            <button onClick={() => setCreatNewType('file')} disabled={!Object.keys(files).length}>
+            <button onClick={() => setCreateNewType('file')} disabled={!Object.keys(files).length}>
               <Image src={AddIcon} width={20} height={20} disabled={!Object.keys(files).length} />
             </button>
             <StyledTooltip>Add new file</StyledTooltip>
           </StyledLabel>
           <StyledLabel htmlFor='create-folder'>
-            <button onClick={() => setCreatNewType('folder')} disabled={!Object.keys(files).length}>
+            <button onClick={() => setCreateNewType('folder')} disabled={!Object.keys(files).length}>
               <Image src={FileIcon} width={20} height={20} disabled={!Object.keys(files).length} />
             </button>
             <StyledTooltip>Add new folder</StyledTooltip>
@@ -278,7 +247,7 @@ const MonacoEditor: React.FC<IProps> = () => {
             setTabs={setTabs}
             selectedTab={selectedTab}
             createNewType={createNewType}
-            setCreatNewType={setCreatNewType}
+            setCreateNewType={setCreateNewType}
             selectedFolder={selectedFolder}
             setSelectedFolder={setSelectedFolder}
             onEditFileTree={() => {
