@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, SetStateAction } from 'react';
 
 import { StyledFileSource, StyledText } from 'components/modules/FileTree/styled';
 import Image from 'components/atoms/Image';
@@ -9,7 +9,7 @@ import FileCodeIcon from 'assets/icons/file-code-icon.svg';
 type TProps = {
   currentPath: string;
   onOpenFile: (currentPath: string, isNew: boolean) => void;
-  setSelectedFolder: (value: React.SetStateAction<string>) => void;
+  setSelectedFolder: (value: SetStateAction<string>) => void;
   onEditFileTree: () => void;
   selectedTab: string;
   style: {
@@ -19,7 +19,7 @@ type TProps = {
   name: string;
 };
 
-const TreeFile: React.FC<TProps> = ({
+const TreeFile: FC<TProps> = ({
   onOpenFile,
   currentPath,
   setSelectedFolder,

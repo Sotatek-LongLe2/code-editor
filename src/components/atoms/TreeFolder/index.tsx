@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, SetStateAction } from 'react';
 
 import { StyledFolderSource, StyledText } from 'components/modules/FileTree/styled';
 
@@ -16,11 +16,11 @@ type TProps = {
   };
   name: string;
   onToggleVisibility: (key: string) => void;
-  setSelectedFolder: (value: React.SetStateAction<string>) => void;
-  setSelectedTab: (value: React.SetStateAction<string>) => void;
+  setSelectedFolder: (value: SetStateAction<string>) => void;
+  setSelectedTab: (value: SetStateAction<string>) => void;
 };
 
-const TreeFolder: React.FC<TProps> = ({
+const TreeFolder: FC<TProps> = ({
   onToggleVisibility,
   setSelectedFolder,
   setSelectedTab,

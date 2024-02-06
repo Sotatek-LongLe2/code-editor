@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { TFileTree } from 'types/types';
 
@@ -13,7 +13,7 @@ type TProps = {
   onClick: () => void;
 };
 
-const ImageButton: React.FC<TProps> = ({ files, type, icon, tooltip, onClick }) => {
+const ImageButton: FC<TProps> = ({ files, type, icon, tooltip, onClick }) => {
   return (
     <StyledLabel htmlFor='create-file'>
       <button onClick={onClick} disabled={!Object.keys(files).length}>

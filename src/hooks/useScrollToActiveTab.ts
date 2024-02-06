@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { RefObject, useEffect } from 'react';
 
-const useScrollToActiveTab = (selectedTab: string, tabRefs: React.RefObject<HTMLDivElement>[], tabs: string[]) => {
+const useScrollToActiveTab = (selectedTab: string, tabRefs: RefObject<HTMLDivElement>[], tabs: string[]) => {
   useEffect(() => {
     const activeTabElement = tabRefs[tabs.indexOf(selectedTab)]?.current;
 

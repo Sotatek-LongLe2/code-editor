@@ -1,4 +1,4 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef, FC, KeyboardEvent, ChangeEvent } from 'react';
 
 import { TTree } from './types';
 import { TFileTree } from 'types/types';
@@ -13,7 +13,7 @@ import CreateNew from 'components/atoms/CreateNew';
 import TreeFile from 'components/atoms/TreeFile';
 import useUtilities from 'hooks/useUtilities';
 
-const FileTree: React.FC<TTree> = ({
+const FileTree: FC<TTree> = ({
   fileTree,
   setFilesTree,
   setSelectedFile,
@@ -74,7 +74,7 @@ const FileTree: React.FC<TTree> = ({
   };
 
   // HANDLE CREATE NEW FILE OR FOLDER AFTER PRESSING ENTER
-  const onEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, type: 'folder' | 'file', path: string) => {
+  const onEnterKeyDown = (e: KeyboardEvent<HTMLInputElement>, type: 'folder' | 'file', path: string) => {
     if (e.key === 'Enter') {
       setFilesTree(type, path, inputValue);
       setCreateNewType('');
@@ -126,7 +126,7 @@ const FileTree: React.FC<TTree> = ({
     }
   };
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 

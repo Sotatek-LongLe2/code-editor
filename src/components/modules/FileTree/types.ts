@@ -1,3 +1,4 @@
+import { SetStateAction } from 'react';
 import { TFileTree } from 'types/types';
 
 export type TTree = {
@@ -8,14 +9,14 @@ export type TTree = {
   selectedFolder: string;
   setFilesTree: (value: 'folder' | 'file', path: string, key: string) => void;
   setSelectedFile: (
-    value: React.SetStateAction<{
+    value: SetStateAction<{
       content?: string | undefined;
       blob?: string | undefined;
     }>,
   ) => void;
-  setSelectedTab: (value: React.SetStateAction<string>) => void;
-  setTabs: (value: React.SetStateAction<string[]>) => void;
-  setCreateNewType: (value: React.SetStateAction<'folder' | 'file' | ''>) => void;
-  setSelectedFolder: (value: React.SetStateAction<string>) => void;
+  setSelectedTab: (value: SetStateAction<string>) => void;
+  setTabs: (value: SetStateAction<string[]>) => void;
+  setCreateNewType: (value: SetStateAction<'folder' | 'file' | ''>) => void;
+  setSelectedFolder: (value: SetStateAction<string>) => void;
   onEditFileTree: () => void;
 };

@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { RefObject, SetStateAction, useEffect } from 'react';
 
 const useAbortCreating = (
-  inputRef: React.RefObject<HTMLInputElement | null>,
-  setCreateNewType: (value: React.SetStateAction<'' | 'folder' | 'file'>) => void,
+  inputRef: RefObject<HTMLInputElement | null>,
+  setCreateNewType: (value: SetStateAction<'' | 'folder' | 'file'>) => void,
 ) => {
   useEffect(() => {
     const onClickOutside = (event: MouseEvent) => {

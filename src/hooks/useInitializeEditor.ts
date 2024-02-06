@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { MutableRefObject, RefObject, useEffect } from 'react';
 import * as monaco from 'monaco-editor';
 import useUtilities from './useUtilities';
 
 const useInitializeEditor = (
-  editorRef: React.RefObject<HTMLDivElement>,
-  editorInstance: monaco.editor.IStandaloneCodeEditor | null,
+  editorRef: RefObject<HTMLDivElement>,
+  editorInstance: MutableRefObject<monaco.editor.IStandaloneCodeEditor>,
   selectedFile: {
     content?: string;
     blob?: string;
@@ -15,7 +15,7 @@ const useInitializeEditor = (
 
   useEffect(() => {
     if (editorRef && editorRef.current) {
-      editorInstance = monaco.editor.create(editorRef.current, {
+      editorInstance.current = monaco.editor.create(editorRef.current, {
         value: selectedFile.content || '',
         language: onCheckLanguage(selectedTab.split('/').pop() || ''),
       });
@@ -34,7 +34,7 @@ const useInitializeEditor = (
 
     return () => {
       if (editorInstance) {
-        editorInstance.dispose();
+        editorInstance.current.dispose();
       }
     };
   }, [selectedFile.content, selectedTab]);

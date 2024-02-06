@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 
 const useCreate = (
   createNewType: 'folder' | 'file' | '',
   selectedTab: string,
-  setHiddenItems: React.Dispatch<
-    React.SetStateAction<{
+  setHiddenItems: Dispatch<
+    SetStateAction<{
       [key: string]: boolean;
     }>
   >,
-  inputRef: React.RefObject<HTMLInputElement | null>,
+  inputRef: RefObject<HTMLInputElement | null>,
 ) => {
   useEffect(() => {
     if (createNewType) {

@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 const useDisplayTree = (
   selectedTab: string,
-  setHiddenItems: React.Dispatch<
-    React.SetStateAction<{
+  setHiddenItems: Dispatch<
+    SetStateAction<{
       [key: string]: boolean;
     }>
   >,

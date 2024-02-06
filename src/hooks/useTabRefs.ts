@@ -1,7 +1,7 @@
-import { useEffect, useState, createRef } from 'react';
+import { useEffect, useState, createRef, RefObject } from 'react';
 
 const useTabRefs = (tabs: string[]) => {
-  const [tabRefs, setTabRefs] = useState<React.RefObject<HTMLDivElement>[]>([]);
+  const [tabRefs, setTabRefs] = useState<RefObject<HTMLDivElement>[]>([]);
 
   useEffect(() => {
     // Create a ref for each tab

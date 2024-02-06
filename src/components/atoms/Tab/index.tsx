@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, RefObject, SetStateAction } from 'react';
 import * as monaco from 'monaco-editor';
 
 import { StyledTabContent } from 'components/modules/MonacoEditor/styled';
@@ -6,13 +6,13 @@ import { StyledTabContent } from 'components/modules/MonacoEditor/styled';
 type TProps = {
   selectedTab: string;
   item: string;
-  tabRefs: React.RefObject<HTMLDivElement>[];
+  tabRefs: RefObject<HTMLDivElement>[];
   index: number;
-  setSelectedTab: (value: React.SetStateAction<string>) => void;
+  setSelectedTab: (value: SetStateAction<string>) => void;
   onEditFileTree: (path: string, newValue: string) => void;
   editorInstance: monaco.editor.IStandaloneCodeEditor | null;
   onSelectTab: (tab: string) => void;
-  setSelectedFolder: (value: React.SetStateAction<string>) => void;
+  setSelectedFolder: (value: SetStateAction<string>) => void;
   onCloseTab: (tab: string) => void;
 };
 

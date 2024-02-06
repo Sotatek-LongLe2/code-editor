@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
 import * as monaco from 'monaco-editor';
 
@@ -38,7 +38,7 @@ import useInitializeEditor from 'hooks/useInitializeEditor';
 
 type TProps = {};
 
-const MonacoEditor: React.FC<TProps> = () => {
+const MonacoEditor: FC<TProps> = () => {
   const [files, setFiles] = useState<TFileTree>({});
   const [tabs, setTabs] = useState<string[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>('');
@@ -49,7 +49,7 @@ const MonacoEditor: React.FC<TProps> = () => {
   const [createNewType, setCreateNewType] = useState<'folder' | 'file' | ''>('');
   const [selectedFolder, setSelectedFolder] = useState<string>('');
 
-  const { onCheckFileType } = useUtilities();
+  const { onCheckFileType, onCheckLanguage } = useUtilities();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -59,7 +59,31 @@ const MonacoEditor: React.FC<TProps> = () => {
 
   useScrollToActiveTab(selectedTab, tabRefs, tabs);
 
-  useInitializeEditor(editorRef, editorInstance.current, selectedFile, selectedTab);
+  // useInitializeEditor(editorRef, editorInstance, selectedFile, selectedTab);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorInstance.current = monaco.editor.create(editorRef.current, {
+        value: selectedFile.content || '',
+        language: onCheckLanguage(selectedTab.split('/').pop() || ''),
+      });
+
+      monaco.editor.defineTheme('myCustomTheme', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#292a2d',
+        },
+      });
+
+      monaco.editor.setTheme('myCustomTheme');
+    }
+
+    return () => {
+      editorInstance.current && editorInstance.current.dispose();
+    };
+  }, [selectedFile.content, selectedTab]);
 
   const onEditFileTree = (path: string, newValue: string) => {
     if (path && newValue) {
@@ -86,7 +110,7 @@ const MonacoEditor: React.FC<TProps> = () => {
     }
   };
 
-  const onChangeZip = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeZip = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length) {
       const zipFile = event.target.files[0];
       const zipReader = new ZipReader();

@@ -1,16 +1,16 @@
-import React from 'react';
+import { ChangeEvent, FC, Ref } from 'react';
 
 import Image from 'components/atoms/Image';
 import { StyledLabel, StyledTooltip } from 'components/modules/MonacoEditor/styled';
 
 type TProp = {
   icon: string;
-  fileInputRef: React.Ref<HTMLInputElement>;
+  fileInputRef: Ref<HTMLInputElement>;
   onClick: () => void;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 };
 
-const ImageInput: React.FC<TProp> = ({ icon, onClick, onChange, fileInputRef }) => {
+const ImageInput: FC<TProp> = ({ icon, onClick, onChange, fileInputRef }) => {
   return (
     <StyledLabel htmlFor='file-upload'>
       <div onClick={onClick}>
