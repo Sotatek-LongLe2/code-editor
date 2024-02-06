@@ -5,14 +5,10 @@ import * as monaco from 'monaco-editor';
 import {
   StyledContainer,
   StyledIconFile,
-  StyledLabel,
-  StyledTabContent,
-  StyledTooltip,
   StyledTabsContent,
   StyledTabFeatures,
   StyledWrapIconFeature,
   StyledWrapTabContent,
-  StyledWrapTreeFile,
 } from './styles';
 
 import { onCheckFileType } from 'utils';
@@ -23,6 +19,8 @@ import Image from 'components/common/Image';
 import ImageButton from 'components/common/ImageButton';
 import FileTree from 'components/layout/FileTree';
 import ImageInput from 'components/common/ImageInput';
+import Tab from 'components/common/Tab';
+import ImageEditor from 'components/common/ImageEditor';
 
 import AddIcon from 'assets/icons/add-icon.svg';
 import FileIcon from 'assets/icons/file-icon.svg';
@@ -214,20 +212,6 @@ const MonacoEditor: React.FC<TProps> = () => {
             onClick={() => setCreateNewType('folder')}
           />
           <ImageInput icon={UploadIcon} onClick={onUploadZip} onChange={onChangeZip} fileInputRef={fileInputRef} />
-          {/* <StyledLabel htmlFor='file-upload'>
-            <div onClick={onUploadZip}>
-              <Image src={UploadIcon} width={20} height={20} />
-            </div>
-            <input
-              type='file'
-              id='zipFileInput'
-              accept='.zip'
-              onChange={onChangeZip}
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-            />
-            <StyledTooltip>Upload zip file</StyledTooltip>
-          </StyledLabel> */}
           <ImageButton
             files={files}
             type='folder'
@@ -238,26 +222,24 @@ const MonacoEditor: React.FC<TProps> = () => {
             }
           />
         </StyledWrapIconFeature>
-        <StyledWrapTreeFile>
-          <FileTree
-            fileTree={files}
-            setFilesTree={(type, path, key) => {
-              onAddFileTree(path, key, type);
-            }}
-            setSelectedFile={setSelectedFile}
-            setSelectedTab={setSelectedTab}
-            tabs={tabs}
-            setTabs={setTabs}
-            selectedTab={selectedTab}
-            createNewType={createNewType}
-            setCreateNewType={setCreateNewType}
-            selectedFolder={selectedFolder}
-            setSelectedFolder={setSelectedFolder}
-            onEditFileTree={() => {
-              onEditFileTree(selectedTab, editorInstance.current?.getValue() || '');
-            }}
-          />
-        </StyledWrapTreeFile>
+        <FileTree
+          fileTree={files}
+          setFilesTree={(type, path, key) => {
+            onAddFileTree(path, key, type);
+          }}
+          setSelectedFile={setSelectedFile}
+          setSelectedTab={setSelectedTab}
+          tabs={tabs}
+          setTabs={setTabs}
+          selectedTab={selectedTab}
+          createNewType={createNewType}
+          setCreateNewType={setCreateNewType}
+          selectedFolder={selectedFolder}
+          setSelectedFolder={setSelectedFolder}
+          onEditFileTree={() => {
+            onEditFileTree(selectedTab, editorInstance.current?.getValue() || '');
+          }}
+        />
       </StyledTabFeatures>
       <StyledTabsContent>
         <StyledWrapTabContent>
@@ -275,36 +257,18 @@ const MonacoEditor: React.FC<TProps> = () => {
             <div style={{ overflowY: 'auto', display: 'flex', width: 'calc(100vw - 450px)' }}>
               {tabs.map((item, index) => {
                 return (
-                  <StyledTabContent
-                    style={{
-                      backgroundColor: selectedTab === item ? '#292a2d' : '#2e2e3a',
-                      color: selectedTab === item ? '#f8f8f8' : '#778181',
-                    }}
-                    ref={tabRefs[index]}
-                    key={index}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedTab(item);
-                      onEditFileTree(selectedTab, editorInstance.current?.getValue() || '');
-                      onSelectTab(item);
-                      setSelectedFolder('');
-                    }}
-                    data-testid='tab-content'
-                  >
-                    <div>{item.split('/').pop()}</div>
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onCloseTab(item);
-                      }}
-                      style={{
-                        color: selectedTab === item ? 'white' : '',
-                      }}
-                      className='icon'
-                    >
-                      ✖
-                    </div>
-                  </StyledTabContent>
+                  <Tab
+                    selectedTab={selectedTab}
+                    item={item}
+                    tabRefs={tabRefs}
+                    index={index}
+                    setSelectedTab={setSelectedTab}
+                    onEditFileTree={onEditFileTree}
+                    editorInstance={editorInstance.current}
+                    onSelectTab={onSelectTab}
+                    setSelectedFolder={setSelectedFolder}
+                    onCloseTab={onCloseTab}
+                  />
                 );
               })}
             </div>
@@ -323,16 +287,7 @@ const MonacoEditor: React.FC<TProps> = () => {
         {tabs.length ? (
           <>
             {onCheckFileType(selectedTab.split('/').pop() || '') ? (
-              <div
-                style={{
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <img style={{ maxHeight: '500px' }} src={selectedFile.blob} alt={selectedTab.split('/').pop()} />
-              </div>
+              <ImageEditor selectedFile={selectedFile} selectedTab={selectedTab} />
             ) : (
               <div ref={editorRef} style={{ height: '95%', width: '100%', paddingTop: '12px', paddingLeft: '12px' }} />
             )}

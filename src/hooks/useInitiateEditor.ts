@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { onCheckLanguage } from 'utils';
 import * as monaco from 'monaco-editor';
+
+import { onCheckLanguage } from 'utils';
 
 const useInitiateEditor = (
   editorRef: React.RefObject<HTMLDivElement>,

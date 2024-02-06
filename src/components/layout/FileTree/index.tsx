@@ -12,6 +12,8 @@ import useUpdateHiddenItems from 'hooks/useSetHiddenTree';
 import useCreateNewTypeEffect from 'hooks/useCreateNewFileOrFolder';
 import useOnClickOutside from 'hooks/useOnClickOutside';
 
+import { StyledWrapTreeFile } from '../MonacoEditor/styles';
+
 const FileTree: React.FC<FileTreeDisplayProps> = ({
   fileTree,
   setFilesTree,
@@ -248,7 +250,7 @@ const FileTree: React.FC<FileTreeDisplayProps> = ({
 
   const innerFileTree = fileTree['fileTree'] || {};
 
-  return <div>{renderTree(innerFileTree)}</div>;
+  return <StyledWrapTreeFile>{renderTree(innerFileTree)}</StyledWrapTreeFile>;
 };
 
 export default FileTree;
