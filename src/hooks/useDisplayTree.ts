@@ -1,13 +1,10 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { toggleVisibility } from 'store/features/tree/treeSlice';
 
-const useDisplayTree = (
-  selectedTab: string,
-  setHiddenItems: Dispatch<
-    SetStateAction<{
-      [key: string]: boolean;
-    }>
-  >,
-) => {
+const useDisplayTree = (selectedTab: string) => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (selectedTab) {
       const parts = selectedTab.split('/');
@@ -24,10 +21,10 @@ const useDisplayTree = (
       }
 
       result.forEach((res) => {
-        setHiddenItems((prev) => ({ ...prev, [res]: false }));
+        dispatch(toggleVisibility({ key: res, value: false }));
       });
     }
-  }, [selectedTab, setHiddenItems]);
+  }, [selectedTab]);
 };
 
 export default useDisplayTree;

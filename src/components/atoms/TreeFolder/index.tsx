@@ -6,34 +6,27 @@ import FolderIcon from 'assets/icons/folder-icon.svg';
 import ArrowIcon from 'assets/icons/arrow-icon.svg';
 
 import Image from 'components/atoms/Image';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { toggleVisibility } from 'store/features/tree/treeSlice';
 
 type TProps = {
   currentPath: string;
   selectedFolder: string;
   depth: number;
-  hiddenItems: {
-    [key: string]: boolean;
-  };
   name: string;
-  onToggleVisibility: (key: string) => void;
   setSelectedFolder: (value: SetStateAction<string>) => void;
   setSelectedTab: (value: SetStateAction<string>) => void;
 };
 
-const TreeFolder: FC<TProps> = ({
-  onToggleVisibility,
-  setSelectedFolder,
-  setSelectedTab,
-  currentPath,
-  selectedFolder,
-  depth,
-  hiddenItems,
-  name,
-}) => {
+const TreeFolder: FC<TProps> = ({ setSelectedFolder, setSelectedTab, currentPath, selectedFolder, depth, name }) => {
+  const dispatch = useDispatch();
+  const treeStructure = useSelector((state: RootState) => state.tree.treeStructure);
+
   return (
     <StyledFolderSource
       onClick={() => {
-        onToggleVisibility(currentPath);
+        dispatch(toggleVisibility({ key: currentPath, value: !treeStructure[currentPath] }));
         setSelectedFolder(currentPath);
         setSelectedTab('');
       }}
@@ -53,7 +46,7 @@ const TreeFolder: FC<TProps> = ({
       </div>
       <div
         style={{
-          transform: hiddenItems[currentPath] ? '' : 'rotate(3.142rad)',
+          transform: treeStructure[currentPath] ? '' : 'rotate(3.142rad)',
         }}
       >
         <Image src={ArrowIcon} height={24} width={24} />

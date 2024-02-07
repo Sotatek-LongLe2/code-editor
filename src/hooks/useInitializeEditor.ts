@@ -37,7 +37,7 @@ const useInitializeEditor = (
         editorInstance.current.dispose();
       }
     };
-  }, [selectedFile.content, selectedTab]);
+  }, [selectedFile.content, selectedTab, editorInstance, editorRef, onCheckLanguage]);
 };
 
 export default useInitializeEditor;

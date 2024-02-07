@@ -1,15 +1,14 @@
-import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
+import { RefObject, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { toggleVisibility } from 'store/features/tree/treeSlice';
 
 const useCreate = (
   createNewType: 'folder' | 'file' | '',
   selectedTab: string,
-  setHiddenItems: Dispatch<
-    SetStateAction<{
-      [key: string]: boolean;
-    }>
-  >,
   inputRef: RefObject<HTMLInputElement | null>,
 ) => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (createNewType) {
       if (selectedTab) {
@@ -27,7 +26,7 @@ const useCreate = (
         }
 
         result.forEach((res) => {
-          setHiddenItems((prev) => ({ ...prev, [res]: false }));
+          dispatch(toggleVisibility({ key: res, value: false }));
         });
       }
 
@@ -36,7 +35,7 @@ const useCreate = (
         inputRef.current && inputRef.current.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
-  }, [createNewType, selectedTab, setHiddenItems, inputRef]);
+  }, [createNewType, selectedTab, inputRef]);
 };
 
 export default useCreate;

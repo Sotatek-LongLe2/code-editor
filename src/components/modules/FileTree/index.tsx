@@ -12,6 +12,8 @@ import TreeFolder from 'components/atoms/TreeFolder';
 import CreateNew from 'components/atoms/CreateNew';
 import TreeFile from 'components/atoms/TreeFile';
 import useUtilities from 'hooks/useUtilities';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 
 const FileTree: FC<TTree> = ({
   fileTree,
@@ -27,7 +29,8 @@ const FileTree: FC<TTree> = ({
   setSelectedFolder,
   onEditFileTree,
 }) => {
-  const [hiddenItems, setHiddenItems] = useState<{ [key: string]: boolean }>({});
+  const treeStructure = useSelector((state: RootState) => state.tree.treeStructure);
+
   const [inputValue, setInputValue] = useState<string>('');
 
   const { onCheckFileType } = useUtilities();
@@ -40,9 +43,9 @@ const FileTree: FC<TTree> = ({
 
   let clonedFileTree = JSON.parse(JSON.stringify(fileTree));
 
-  useDisplayTree(selectedTab, setHiddenItems);
+  useDisplayTree(selectedTab);
 
-  useCreate(createNewType, selectedTab, setHiddenItems, inputRef);
+  useCreate(createNewType, selectedTab, inputRef);
 
   useAbortCreating(inputRef, setCreateNewType);
 
@@ -67,10 +70,6 @@ const FileTree: FC<TTree> = ({
     if (tabs.every((tab) => tab !== currentPath)) {
       setTabs([...tabs, currentPath]);
     }
-  };
-
-  const onToggleVisibility = (key: string) => {
-    setHiddenItems((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   // HANDLE CREATE NEW FILE OR FOLDER AFTER PRESSING ENTER
@@ -147,16 +146,14 @@ const FileTree: FC<TTree> = ({
         return (
           <Fragment key={currentPath}>
             <TreeFolder
-              onToggleVisibility={onToggleVisibility}
               setSelectedFolder={setSelectedFolder}
               setSelectedTab={setSelectedTab}
               currentPath={currentPath}
               selectedFolder={selectedFolder}
               depth={depth}
-              hiddenItems={hiddenItems}
               name={key}
             />
-            {!hiddenItems[currentPath] && renderTree(item as TFileTree, currentPath, depth + 1)}
+            {!treeStructure[currentPath] && renderTree(item as TFileTree, currentPath, depth + 1)}
             {/* DETERMINE NEW FILE TYPE */}
             {createNewType && selectedFolder && selectedFolder === currentPath && (
               <CreateNew

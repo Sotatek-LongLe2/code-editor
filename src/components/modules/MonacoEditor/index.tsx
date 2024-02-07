@@ -83,7 +83,7 @@ const MonacoEditor: FC<TProps> = () => {
     return () => {
       editorInstance.current && editorInstance.current.dispose();
     };
-  }, [selectedFile.content, selectedTab]);
+  }, [selectedFile.content, selectedTab, onCheckLanguage]);
 
   const onEditFileTree = (path: string, newValue: string) => {
     if (path && newValue) {
