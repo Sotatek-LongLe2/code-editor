@@ -35,7 +35,7 @@ const useCreate = (
         inputRef.current && inputRef.current.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
-  }, [createNewType, selectedTab, inputRef]);
+  }, [createNewType, selectedTab, inputRef, dispatch]);
 };
 
 export default useCreate;

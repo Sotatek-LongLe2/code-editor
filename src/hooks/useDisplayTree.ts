@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleVisibility } from 'store/features/tree/treeSlice';
 
@@ -24,7 +24,7 @@ const useDisplayTree = (selectedTab: string) => {
         dispatch(toggleVisibility({ key: res, value: false }));
       });
     }
-  }, [selectedTab]);
+  }, [selectedTab, dispatch]);
 };
 
 export default useDisplayTree;

@@ -34,7 +34,6 @@ import MenuIcon from 'assets/icons/menu-icon.svg';
 import useScrollToActiveTab from 'hooks/useScrollToActiveTab';
 import useTabRefs from 'hooks/useTabRefs';
 import useUtilities from 'hooks/useUtilities';
-import useInitializeEditor from 'hooks/useInitializeEditor';
 
 type TProps = {};
 
@@ -58,8 +57,6 @@ const MonacoEditor: FC<TProps> = () => {
   const tabRefs = useTabRefs(tabs);
 
   useScrollToActiveTab(selectedTab, tabRefs, tabs);
-
-  // useInitializeEditor(editorRef, editorInstance, selectedFile, selectedTab);
 
   useEffect(() => {
     if (editorRef.current) {
