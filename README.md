@@ -1,46 +1,61 @@
-# Getting Started with Create React App
+# Elice Coding Editor Homework
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Purpose
 
-## Available Scripts
+1. The goal of this PA is to implement part of the features of Elice.
+2. The main evaluation criteria for this PA will be not only the use of React but also the
+   understanding of complex external libraries that are difficult to handle.
+3. Development must be done using git, and after working on GitHub (https://github.com), please share the project with the @elice-frontend account and send an email.
+4. This PA is for senior engineers. For this project we are not requiring a pixel-perfect CSS.
 
-In the project directory, you can run:
+## Function Requirements
 
-### `npm start`
+1. At the top, there should be a UI that allows users to upload a file (zip file) and, after editing in the bottom editor, download the modified zip file again (OPTIONAL: Upload via drag-drop is possible).
+2. After uploading a file, the contents inside the zip file are displayed as a tree in the left File tree.
+3. You may use a library for the UI, but you must write the logic for parsing the zip file and creating the subsequent tree structure yourself.
+4. When a file from the left file tree is clicked, its contents are added to a tab and opened in the Monaco editor. Binary files, including images, are displayed directly on the screen. Editable text is shown in the editor.
+5. Please write logic to determine whether a file is binary or editable.
+6. Files in the Tab can be closed.
+7. If there are changes to a file, you can download it by pressing the download button at the top.
+8. The Monaco editor should provide undo/redo functionality and be bound to the ctrl(cmd)+z and ctrl(cmd)+shift+z keys.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Covered features
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Uploading a zip file and be able to parse this zip file into file tree.
+2. Adding a new file and new folder to file tree on the left menu.
+3. When clicking on each editable file, user can see the content and edit the content of this file.
+4. When click on each binary file such as image files, user can see the image directly.
+5. Allow editing multiple files at the same time.
+6. Download as a zip file to local.
+7. Syntax highlight for the following file extensions: Javascript, Typescript, HTML, CSS, JSON.
 
-### `npm test`
+## Extra features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+8. Simple Unit testing and E2E testing are covered.
+9. Highlight selected file or hovered file on the left menu.
+10. After creating a new file, automatically open this file's content on the main monaco editor.
 
-### `npm run build`
+## Technologies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- ReactJS.
+- Typescript.
+- CSS: Styled Component.
+- Redux, Redux Toolkit.
+- Monaco editor.
+- Jest/Cypress.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Setting up and running locally
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. ### `npm install` : install required dependencies and libraries
+2. ### `npm start`: start application locally at [http://localhost:3000](http://localhost:3000)
 
-### `npm run eject`
+## Zipping & Unzipping file Explanation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+All functional logic related to handling zip & unzip file are implemented inside /src/lib/zip
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Details
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `src/services/zip-reader.ts`: Handling reading a zipped file and output will be a files tree with detail file content.
+- `src/services/zip-writer.ts`: Handling Compress the file as a Zip format.
+- `src/types/types.ts`: Defining necessary types.
+- `src/utils/index.ts`: Including some helper functions.
